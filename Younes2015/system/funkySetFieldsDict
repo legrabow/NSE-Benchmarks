@@ -1,0 +1,17 @@
+FoamFile
+{
+    version         2.0;
+    format          ascii;
+    class           dictionary;
+    object          funkySetFieldsDict;
+}
+
+expressions
+(
+	initPressure
+	{
+		field p;
+		expression "1. * (1. - pos().y) * 9.81 - 1. * 1. * 9.81";
+		condition "(pos().y<=1.) && (pos().y>=0)";
+	}
+);

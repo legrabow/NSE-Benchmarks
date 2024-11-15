@@ -1,0 +1,97 @@
+/*--------------------------------*- C++ -*----------------------------------*\
+| =========                 |                                                 |
+| \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox           |
+|  \\    /   O peration     | Version:  v2406                                 |
+|   \\  /    A nd           | Website:  www.openfoam.com                      |
+|    \\/     M anipulation  |                                                 |
+\*---------------------------------------------------------------------------*/
+FoamFile
+{
+    version     2.0;
+    format      ascii;
+    class       dictionary;
+    object      fvSolution;
+}
+// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
+
+solvers
+{
+    "rho.*"
+    {
+        solver          PCG;
+        preconditioner  DIC;
+        tolerance       1e-10;
+        relTol          0;
+    }
+
+    p_rgh
+    {
+        solver          PCG;
+        preconditioner  DIC;
+        tolerance       1e-10;
+        relTol          0;
+    }
+
+    p_rghFinal
+    {
+        $p_rgh;
+        relTol          0;
+    }
+
+    "(U|T)"
+    {
+        solver          PBiCGStab;
+        preconditioner  DILU;
+        tolerance       1e-10;
+        relTol          0;
+    }
+
+    "(U|T)Final"
+    {
+        $U;
+        relTol          0;
+    }
+}
+
+PIMPLE
+{
+    momentumPredictor yes;
+    nOuterCorrectors 1000;
+    nCorrectors     10;
+    nNonOrthogonalCorrectors 0;
+    pRefCell        0;
+    // NOTE: Change when you change the mesh! Chose such that it is apart from a boundary
+    pRefValue       -0.024525;
+
+        
+    residualControl
+    {
+        U
+        {
+                tolerance  1e-10;
+                relTol      0;
+        }
+        p
+        {
+                tolerance  5e-10;
+                relTol      0;
+        }
+     }
+}
+
+// relaxationFactors
+// {
+//     // fields
+//     // {
+//     //     p      0.2;
+//     //     pFinal   0.2;
+//     // }
+//     equations
+//     {
+//         "p_rgh|U|h|k|rho.*|epsilon"     0.2;
+//         "(p_rgh|U|h|k|rho.*|epsilon)Final"   0.2;
+//     }
+// }
+
+
+// ************************************************************************* //
