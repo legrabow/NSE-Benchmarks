@@ -1,2 +1,2 @@
 # NSE-Benchmarks
-Collection of benchmarks for Navier Stokes flow and transport
+Collection of benchmarks for flow and transport described by Navier Stokes equations
